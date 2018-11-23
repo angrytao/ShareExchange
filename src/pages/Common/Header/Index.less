@@ -1,0 +1,79 @@
+@import '../../../default.less';
+
+.content{
+    width: 1000px;
+    margin:0 auto;
+ }
+
+ @topH: 36px;
+ @navH:60px;
+ @themeColor:#ffc333;
+
+.top{
+    background:#eee;
+    font-size: 14px;
+    height: @topH;
+    line-height: @topH;
+    border-bottom: 1px #ccc solid;
+
+    ul{
+        margin: 0;
+        padding: 0;
+        li{
+            float: left;
+            margin: 0 10px;
+
+            &:hover {
+                transition: all 0.5s;
+                color: @themeColor;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.nav{
+    background: #fff;
+    height: @navH;
+    margin-bottom: 5px;
+    box-shadow: 0 5px 10px #eee;
+
+    .nav_logo {
+        background: url(../Header/images/Logo_s.png) no-repeat;
+        background-size: contain;
+        width:170px;
+        height: @navH;
+        line-height: @navH;
+        display: inline-block;
+        z-index: 999;
+    }
+
+    .nav_menu{
+        list-style: none;
+        float: right;
+
+        li{
+            display: inline;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            line-height: @navH;
+            margin: 0 15px;
+            padding-bottom: 18px;
+            cursor: pointer;
+
+            &:hover{
+                transition: all 0.5s;
+                color:#909090;
+                padding-bottom: 18px;
+                border-bottom:3px solid #909090;
+            }
+        }
+
+    } 
+}
+
+.clear{
+    clear: both;
+}
+
