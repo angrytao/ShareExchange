@@ -1,0 +1,42 @@
+@import '~@/default.less';
+.EditMarker {
+    .edititem {
+        display: flex;
+        width: 220px;
+        align-items: center;
+        padding: 0 10px;
+        .border;
+        border-style: dashed;
+        .color {
+            margin-right: 5px;
+            width: 18px;
+            height: 18px;
+            box-shadow: @bs;
+            border-radius: 3px;
+        }
+        .valuebar {
+            flex: 1;
+        }
+        .value {
+            width: 40px;
+            text-align: center;
+        }
+    }
+    .itemcontent {
+        flex-wrap: wrap;
+        >input,
+        >textarea {
+            width: 220px;
+            margin: 5px 0;
+        }
+    }
+}
+
+.popover {
+    // background-color: red;
+    :global {
+        .ant-popover-inner-content {
+            padding: 0;
+        }
+    }
+}

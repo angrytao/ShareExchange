@@ -1,2 +1,107 @@
+@import '~@/default.less';
 .Cartography {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    @pcd: rgba(0, 0, 0, 0.8);
+    >div {
+        height: 100%;
+    }
+    .siderbar {
+        @s-w: 68px;
+        width: @s-w;
+        background-color: @pcd;
+        z-index: 2;
+        .logo {
+            height: @s-w;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 46px;
+            transform: translateX(3px);
+        }
+        .mappingbar,
+        .actionbar {
+            >div {
+                position: relative;
+                width: @s-w;
+                height: @s-w;
+                color: #ccc;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                transition: 0.3s;
+                >div {
+                    height: 100%;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 14px;
+                    transform: translateY(-6px) translateX(-2px);
+                    &::before {
+                        transform: translateY(4px);
+                        font-size: 32px;
+                    }
+                }
+                &::before {
+                    content: '';
+                    width: 3px;
+                    height: 0;
+                    background: white;
+                    transition: 0.3s;
+                    opacity: 0.3;
+                }
+                &:global(.active),
+                &:hover {
+                    background-color: darken(@pcd, 10%);
+                    color: white;
+                    &::before {
+                        height: 100%;
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+        .mappingbar {
+            margin-top: 20px;
+        }
+        .actionbar {
+            position: absolute;
+            bottom: 0;
+            >div:not(:first-child) {
+                >div {
+                    font-size: 14px;
+                    &::before {
+                        font-size: 24px;
+                    }
+                }
+            }
+        }
+    }
+    .toolpanel {
+        width: 350px;
+        box-shadow: @bs;
+        padding: 10px;
+        z-index: 1;
+        >div {
+            height: 100%;
+            width: 100%;
+            display: none;
+        }
+        >div:global(.active) {
+            display: block;
+        }
+    }
+    .map {
+        flex: 1;
+        #map {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+    }
 }

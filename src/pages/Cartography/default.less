@@ -1,0 +1,51 @@
+@fc: #333;
+@sc: #aaa;
+.h1 {
+  color: @fc;
+  margin: 0 5px 0 5px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  &::before {
+    font-size: 22px;
+    font-weight: 700;
+    margin-right: 5px;
+  }
+}
+
+.slider {
+  border-bottom: 1px solid #eee;
+  margin: 10px 0;
+}
+
+.group {
+  transition: 0.3s;
+  border-radius: 3px;
+  padding: 5px;
+  &:hover {
+    background-color: #f6f6f6;
+  }
+}
+
+.fitem {
+  color: @fc;
+  display: flex; // margin: 5px 0;
+  padding: 5px;
+  align-items: center;
+  .fitem_t {
+    text-align: left;
+  }
+  .fitem_i {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .fitem_mt {
+    font-size: 15px;
+  }
+  .fitem_st {
+    color: @sc;
+    font-size: 12px;
+  }
+}
