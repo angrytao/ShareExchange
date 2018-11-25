@@ -1,5 +1,5 @@
 import React,{ Component }  from 'react';
-import st from './Index.less';
+import st from './Home.less';
 
 class UserWarpper extends Component{
     render(){

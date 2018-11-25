@@ -6,7 +6,7 @@ import cdPic3 from '../images/cData3.png';
 import cdPic4 from '../images/cData4.png';
 import st from './Home.less';
 
-const ConentData = (props) =>{
+const ContentData = (props) =>{
     return (
         <div className={st.content_Data}>
             <div className={st.content}>
@@ -44,11 +44,12 @@ const ConentData = (props) =>{
                     </Col>
                 </Row>
                 <div style={{textAlign:'center',marginTop:'30px'}}>
-                    <Button type="primary" size="large">分享您的数据</Button>
+                    <Button type="primary" size="large" icon="share-alt">分享您的数据</Button>
                 </div>
             </div>
         </div>
     )
+
 }
 
-export default ConentData;
+export default ContentData;
