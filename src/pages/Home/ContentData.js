@@ -1,5 +1,6 @@
 import React  from 'react';
 import { Row, Col, Button } from 'antd';
+import { Link } from 'react-router-dom';
 import cdPic1 from '../images/cData1.png';
 import cdPic2 from '../images/cData2.png';
 import cdPic3 from '../images/cData3.png';
@@ -44,7 +45,7 @@ const ContentData = (props) =>{
                     </Col>
                 </Row>
                 <div style={{textAlign:'center',marginTop:'30px'}}>
-                    <Button type="primary" size="large" icon="share-alt">分享您的数据</Button>
+                    <Link to='/dataexchange'>分享您的数据</Link>
                 </div>
             </div>
         </div>

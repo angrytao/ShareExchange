@@ -1,2 +1,64 @@
-.DataExchange {
+.content{
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.banner{
+    background: url(../Images/bg3.jpg);
+    background-size:100% 100%;
+    width: 100%;
+    height: 120px;
+    padding-top: 20px;
+
+    h1{
+        color:#fff;
+        font-size: 2.2em;
+        margin-bottom: 10px;
+    }
+
+    p{
+        color: #ddd;
+
+        &:hover{
+            color:#fff;
+            transition: all 0.5s;
+        }
+    }
+
+}
+
+.filterWarp{
+    background: #fff;
+    border-bottom:1px solid #ddd;
+
+    label{
+        height: 30px;
+        display:inline-block;
+    }
+
+    ul{
+        margin:0;
+        padding: 0;
+        display: inline-block;
+
+        li{
+            width: 80px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            float: left;
+            display:block;
+
+            &:hover{
+                cursor: pointer;
+                color:#1890ff;
+                border-radius: 30px;
+                background:#ddd;
+            }
+        }
+    }
+}
+
+.clear{
+    clear: both;
 }
