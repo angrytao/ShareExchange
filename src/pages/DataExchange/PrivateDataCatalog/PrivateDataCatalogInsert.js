@@ -1,5 +1,5 @@
 import { Component, Fragment } from 'react';
-import { Steps, Icon, Input, Button,Modal } from 'antd';
+import { Steps, Icon, Input, Button, Modal, message } from 'antd';
 import st from './PrivateDataCatalog.less';
 
 const steps = [{
@@ -60,21 +60,21 @@ class PrivateDataCatalogInsert extends Component {
             <Steps size="small" current={this.state.stepCurrent}>
                 {steps.map(item => <Step key = {item.title} title = {item.title}/>)}
             </Steps>
-            <div className={st.steps-content}>{steps[this.state.stepCurrent].content}</div>
-            <div className={st.steps-action}>
+            <div className={st.stepsContent}>{steps[this.state.stepCurrent].content}</div>
+            <div className={st.stepsAction}>
                 {
                     this.state.stepCurrent < steps.length - 1
-                    && <Button type="primary" onClick={() => this.next()}>Next</Button>
+                    && <Button type="primary" onClick={() => this.next()}>继续</Button>
                 }
                 {
                     this.state.stepCurrent === steps.length - 1
-                    && <Button type="primary" onClick={() => message.success('Processing complete!')}>Done</Button>
+                    && <Button type="primary" onClick={() => message.success('Processing complete!')}>完成</Button>
                 }
                 {
                     this.state.stepCurrent > 0
                     && (
                     <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-                    Previous
+                    后退
                     </Button>
                     )
                 }
