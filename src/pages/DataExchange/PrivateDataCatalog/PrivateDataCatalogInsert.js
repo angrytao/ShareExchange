@@ -1,7 +1,8 @@
 import { Component, Fragment } from 'react';
-import { Steps, Icon, Input, Button, Modal, message } from 'antd';
+import { Steps, Icon, Input, Button, Modal, message, Upload } from 'antd';
 import st from './PrivateDataCatalog.less';
 
+//新增数据配置信息
 const steps = [{
     title: '上传文件',
     content: 'First-content',
@@ -12,6 +13,25 @@ const steps = [{
     title: '完成上传',
     content: 'Last-content',
   }];
+
+  //上传组件
+  const Dragger = Upload.Dragger;
+  const uploadProps = {
+    name: 'file',
+    multiple: true,
+    action: '//jsonplaceholder.typicode.com/posts/',
+    onChange(info) {
+      const status = info.file.status;
+      if (status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
 
 class PrivateDataCatalogInsert extends Component {
   constructor(props){
@@ -60,7 +80,30 @@ class PrivateDataCatalogInsert extends Component {
             <Steps size="small" current={this.state.stepCurrent}>
                 {steps.map(item => <Step key = {item.title} title = {item.title}/>)}
             </Steps>
-            <div className={st.stepsContent}>{steps[this.state.stepCurrent].content}</div>
+            <div className={st.stepsContent}>
+                {
+                    this.state.stepCurrent===0 && 
+                    <div>
+                        <Dragger {...uploadProps}>
+                            <p className="ant-upload-drag-icon"><Icon type="plus-square"/></p>
+                            <p className="ant-upload-text">点击或将文件拖拽到这里上传</p>
+                            <p className="ant-upload-hint">支持Excel、CSV表格文件，以及txt文本文件</p>
+                        </Dragger>
+                        <p style={{fontWeight:'bold'}}>表格式文件说明</p>
+                        <ol>
+                            <li>请上传有标准行列的一维数据表格。（有合并单元格的数据请处理过后再上传，否则可能出现表头识别有误）</li>
+                            <li>日期字段需包含年月日（如2016/1/1），或年月日时分秒（如2016/1/1 00:00:00）</li>
+                            <li>在地图上呈现时需包含地址或经纬度，详见数据模板</li>
+                        </ol>
+                    </div>
+                }
+                {
+                    this.state.stepCurrent===1 && <div>222</div>
+                }
+                {
+                    this.state.stepCurrent===2 && <div>333</div>
+                }
+            </div>
             <div className={st.stepsAction}>
                 {
                     this.state.stepCurrent < steps.length - 1
