@@ -1,5 +1,6 @@
 import { Component, Fragment } from 'react';
 import { List, Avatar, Icon, Input ,Form, Button, Tooltip } from 'antd';
+import DataFilter from './DataFilter';
 import tag1 from '../images/tag1.png';
 import tag2 from '../images/tag2.png';
 import tag3 from '../images/tag3.png';
@@ -131,17 +132,10 @@ const DataCatalog =[
     }
 ];
 
-function query(arr, q) {
-    return arr.filter(v => Object.values(v).some(v => new RegExp(q + '').test(v))
-    )
-  }
-
 class OpenDataCatalog extends Component{
     constructor(props){
         super(props);
         this.state={
-            tagList:['全部','统计','财政税收','交通','安全','测绘','医疗卫生','教育','社区'],
-            selectedTag:'全部',
             dataCatalog:[...DataCatalog]
         }
         this.handleTagSelect = this.handleTagSelect.bind(this);
@@ -149,34 +143,10 @@ class OpenDataCatalog extends Component{
     }
 
     render(){
-        const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+        
         return (
             <Fragment>
-                <div className={st.filterWarp}>
-                    <Form layout="inline" style={{marginBottom:'10px'}} onSubmit={this.handleSearch}>
-                        <FormItem>
-                            <label htmlFor="inputCatalogName" style={{lineHeight:'40px'}}>筛选：</label>
-                        </FormItem>
-                        <FormItem>
-                            {getFieldDecorator('searchCatalogName',{})(
-                                <Input id="inputCatalogName" style={{width:'400px'}} placeholder="请输入查询目录的名称"/>
-                            )}
-                        </FormItem>
-                        <FormItem>
-                            <Button 
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                查询
-                            </Button>
-                        </FormItem>
-                    </Form>
-                    <label>分类：</label>
-                    <ul>
-                        {this.getTagList()}
-                    </ul>
-                    <div className={st.clear}></div>
-                </div>
+                <DataFilter></DataFilter>
                 {this.getOpenData()}
             </Fragment>
         )
@@ -189,9 +159,9 @@ class OpenDataCatalog extends Component{
         // const filterList = typeof(searchContent) != "undefined" ??DataCatalog.filter(item=>item.ShareDataTitle==searchContent):DataCatalog;
         const filterList = typeof(searchContent) != "undefined" ? DataCatalog.filter(item=>item.ShareDataTitle.indexOf(searchContent)>=0) : DataCatalog;
         //console.log(searchContent);
-        this.setState({
+        this.setState(() => ({
             dataCatalog:[...filterList]
-        });
+        }));
     }
 
     //获取Tag标签列表
@@ -214,10 +184,10 @@ class OpenDataCatalog extends Component{
         const tagType = e.target.outerText;
         const filterList = tagType!='全部'?DataCatalog.filter(item=>item.TagName==tagType):DataCatalog;
         // console.log(filterList);
-        this.setState({
+        this.setState(() => ({
             dataCatalog:[...filterList],
             selectedTag:tagType
-        });
+        }))
     }
 
     //获取开放数据目录
@@ -241,7 +211,6 @@ class OpenDataCatalog extends Component{
                                     <IconText type="user" text={item.UserName} />,
                                     <IconText type="star-o" text={item.ShareStarNum} />,
                                     <IconText type="download" text={item.ShareDownloadNum}/>
-                                    
                                 ]}
                         extra={<img width={170} alt="logo" src={this.getTagImage(item.TagName)} />}
                     >
@@ -258,7 +227,7 @@ class OpenDataCatalog extends Component{
     }
 
 
-    //
+    //获取标签
     getTagImage(tag){
         switch(tag){
             case '统计':
@@ -284,6 +253,4 @@ class OpenDataCatalog extends Component{
     
 }
 
-//Form.create之后，拿到this.props.form
-OpenDataCatalog = Form.create()(OpenDataCatalog);
 export default OpenDataCatalog;

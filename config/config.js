@@ -79,13 +79,13 @@ export default {
     moment: 'moment',
     jQuery: '$',
   },
-  // proxy: {
-  //   '/api/': {
-  //     target: 'http://localhost:44947/',
-  //     changeOrigin: true,
-  //     pathRewrite: { "^/api": "" },
-  //   },
-  // },
+  proxy: {
+    '/api/': {
+      target: 'http://localhost:55147/',
+      changeOrigin: true,
+      pathRewrite: { "^/api": "" },
+    },
+  },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,
