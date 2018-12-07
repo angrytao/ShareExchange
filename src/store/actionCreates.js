@@ -1,6 +1,8 @@
 import { 
     DATAFILTER_CHANGE_SEARCHVALUE, 
-    DATAFILTER_GET_TAGLIST
+    DATAFILTER_GET_TAGLIST,
+    OPENSHAREDATA_INIT_OPENDATALIST,
+    PRIVATEDATACATALOG_INIT_PRIVATEDATALIST
 } from './actionTypes';
 
 const getDataFilterSearchValueChange = (value) => ({
@@ -13,7 +15,21 @@ const getDataFilterTagListGet = (value) => ({
     value
 });
 
+const initOpenShareDataList = (data,value) => ({
+    type:OPENSHAREDATA_INIT_OPENDATALIST,
+    data,
+    value
+});
+
+const initPrivateDataList = (data,value) => ({
+    type:PRIVATEDATACATALOG_INIT_PRIVATEDATALIST,
+    data,
+    value
+});
+
 export {
     getDataFilterSearchValueChange,
-    getDataFilterTagListGet
+    getDataFilterTagListGet,
+    initOpenShareDataList,
+    initPrivateDataList
 }
