@@ -10,13 +10,15 @@ class Selector extends Component{
     constructor(props){
         super(props);
         this.state = store.getState();
+        //订阅Store
+        this.handleStoreChange = this.handleStoreChange.bind(this);
+        store.subscribe(this.handleStoreChange);  
+        
         this.handleSearchClick = this.handleSearchClick.bind(this);
         this.handleSearchCatalogValueChange = this.handleSearchCatalogValueChange.bind(this);
         this.getTagList = this.getTagList.bind(this);
         this.handleClick = this.handleClick.bind(this);
-        //订阅Store
-        this.handleStoreChange = this.handleStoreChange.bind(this);
-        store.subscribe(this.handleStoreChange);              
+            
     }
 
     componentDidMount(){
@@ -80,7 +82,6 @@ class Selector extends Component{
 
     //获取Tag标签列表
     getTagList = () => {
-        console.log('render');
         return this.state.tagList.map((item,index)=>{
             return(
                 <li

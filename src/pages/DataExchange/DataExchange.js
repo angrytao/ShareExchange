@@ -4,6 +4,7 @@ import Banner from './Banner';
 //import OpenDataCatalog from './OpenDataCatalog';
 import PublicDataCatalog from './PublicDataCatalog/PublicDataCatalog';
 import PrivateDataCatalog from './PrivateDataCatalog/PrivateDataCatalog';
+import Statistics from './Statistics/Statistics';
 import { Tabs, Icon  } from 'antd';
 import st from './DataExchange.less';
 
@@ -22,9 +23,11 @@ class DataExchange extends Component {
               <PublicDataCatalog></PublicDataCatalog>
             </TabPane>
             <TabPane tab={<span><Icon type="copy"></Icon>我的数据</span>} key="2">
-              <PrivateDataCatalog></PrivateDataCatalog>
+            <PrivateDataCatalog></PrivateDataCatalog>
             </TabPane>
-            <TabPane tab={<span><Icon type="pie-chart"></Icon>用量统计</span>} key="3">Content of Tab Pane 2</TabPane>
+            <TabPane tab={<span><Icon type="pie-chart"></Icon>用量统计</span>} key="3">
+              <Statistics></Statistics>
+            </TabPane>
           </Tabs>
         </div>
       </Fragment>

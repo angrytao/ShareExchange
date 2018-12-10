@@ -1,5 +1,5 @@
 import { Component, Fragment } from 'react';
-import { List, Avatar, Icon, Input, Form, Button, Tooltip } from 'antd';
+import { List, Avatar, Icon, Input, Form, Button, Tooltip,Card } from 'antd';
 import axios from 'axios';
 import { requestGetShareData } from '../../../Common/requestUrl';
 import store from '../../../store';
@@ -14,6 +14,7 @@ import tag7 from '../../images/tag7.png';
 import tag8 from '../../images/tag8.png';
 import tag9 from '../../images/tag9.png';
 import Selector from '../Selector';
+import st from '../DataExchange.less';
 
 
 const IconText = ({ type, text }) => (
@@ -22,23 +23,25 @@ const IconText = ({ type, text }) => (
         {text}
     </span>
 );
-
+const { Meta } = Card;
 
 class PublicDataCatalog extends Component {
     constructor(props) {
         super(props);
-        this.state = store.getState();
+        this.state = store.getState();   
         this.handleStoreChange = this.handleStoreChange.bind(this);
-        this.handleResetOpenDataCatalog = this.handleResetOpenDataCatalog.bind(this);
+        store.subscribe(this.handleStoreChange);  
+
         this.getOpenData = this.getOpenData.bind(this);
-        store.subscribe(this.handleStoreChange);    
+        this.handleResetOpenDataCatalog = this.handleResetOpenDataCatalog.bind(this);
+        
     }
 
     componentDidMount() {
         axios.post(requestGetShareData).then((res) => {
             const data = res.data;
             window.openDataCatalog = data;
-            const action = initOpenShareDataList(data);
+            const action = initOpenShareDataList(data,'');
             store.dispatch(action);
         });
     }
@@ -61,32 +64,38 @@ class PublicDataCatalog extends Component {
     getOpenData = () => {
         return (
             <List
-                itemLayout="vertical"
-                style={{marginBottom:'30px'}}
-                size="large"
+                style={{margin:'30px 0'}}
+                grid={{ gutter: 24, column: 4 }}
+                dataSource={this.state.openDataCatalog}
                 pagination={{
                     onChange: (page) => {
                         console.log(page)
                     },
-                    pageSize: 5
+                    pageSize: 12
                 }}
-                dataSource={this.state.openDataCatalog}
-                footer={<div><b>公共开放数据</b></div>}
                 renderItem={item => (
-                    <List.Item
-                        key={item.ShareDataId}
-                        actions={[
-                            <IconText type="user" text={item.UserName} />,
-                            <IconText type="star-o" text={item.ShareStarNum} />,
-                            <IconText type="download" text={item.ShareDownloadNum} />
-                        ]}
-                        extra={<img width={170} alt="logo" src={this.getTagImage(item.TagName)} />}
-                    >
-                        <List.Item.Meta
-                            title={<a>{item.ShareDataTitle}</a>}
-                            description={item.ShareDataDesc}
-                        />
-                        <a href="#">查看</a> | <a href="#">下载</a>
+                    <List.Item>
+                        <Card
+                            cover={<img alt="example" src={this.getTagImage(item.TagName)} />}
+                            actions={[
+                                <IconText type="star-o" text={item.ShareStarNum} />,
+                                <IconText type="download" text={item.ShareDownloadNum} />,
+                                <a>查看</a>
+                            ]}
+                        >
+                            <Meta 
+                                title={item.ShareDataTitle}
+                                description={
+                                    <Tooltip 
+                                        title={item.ShareDataDesc}
+                                        placement="rightTop"
+                                        trigger="click"
+                                    >
+                                        <div className={st.intro}>{item.ShareDataDesc}</div>
+                                    </Tooltip>
+                                    }
+                            />
+                        </Card>
                     </List.Item>
                 )}
             >
