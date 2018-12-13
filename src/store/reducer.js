@@ -40,7 +40,6 @@ export default (state = defaultState, action) => {
 
     //PrivateData 获取个人数据目录列表
     if(action.type === PRIVATEDATACATALOG_INIT_PRIVATEDATALIST){
-        debugger;
         let newState = JSON.parse(JSON.stringify(state));
         newState.privateDataCatalog = action.data;
         newState.selectedTag = action.value;

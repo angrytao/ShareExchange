@@ -1,18 +1,39 @@
 import { Component, Fragment } from 'react';
 import ReactEcharts from 'echarts-for-react';
-import { Row, Col } from 'antd';
+import { Row, Col, List } from 'antd';
 
+
+const data = [
+    'Racing car sprays burning fuel into crowd.',
+    'Japanese princess to wed commoner.',
+    'Australian walks 100km after outback crash.',
+    'Man charged over missing wedding girl.',
+    'Los Angeles battles huge wildfires.',
+  ];
 
   class Statistics extends Component {
     render(){
         
         return(
             <Row>
-                <Col span={8}>
-                    <ReactEcharts option={this.getHotOption()} />
+                <Col span={7}>
+                    <h3 style={{ margin: '16px 0' }}>数据使用排行</h3>
+                    <List
+                        size="small"
+                        bordered
+                        dataSource={data}
+                        renderItem={item => (<List.Item>{item}</List.Item>)}
+                    />
+                    <ReactEcharts 
+                        option={this.getHotOption()} 
+                    />
                 </Col>
-                <Col span={16}>
-                    <ReactEcharts option={this.getTypeOption()} />
+                <Col span={1}></Col>
+                <Col span={15} style={{border:'1px solid #ccc',borderRadius:'5px',margin:'10px'}}>
+                    <ReactEcharts 
+                        option={this.getTypeOption()} 
+                        style={{height:'500px'}}
+                    />
                 </Col>
             </Row>
         )
@@ -20,8 +41,8 @@ import { Row, Col } from 'antd';
 
     getHotOption(){
         return({
-            title: {
-                text: '数据使用排行'
+            title : {
+                text: '数据下载量统计'
             },
             tooltip: {},
             xAxis: {
@@ -39,7 +60,7 @@ import { Row, Col } from 'antd';
     getTypeOption(){
         return({
             title: {
-                text: '数据使用排行'
+                text: '数据类型'
             },
             tooltip: {},
             calculable : true,
@@ -47,7 +68,7 @@ import { Row, Col } from 'antd';
                 {
                     name:'面积模式',
                     type:'pie',
-                    radius : [40, 120],
+                    radius : [50, 220],
                     roseType : 'area',
                     data:[
                         {value:10, name:'交通'},

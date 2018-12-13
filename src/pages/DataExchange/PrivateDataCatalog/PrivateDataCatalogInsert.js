@@ -70,7 +70,7 @@ class PrivateDataCatalogInsert extends Component {
                     this.state.stepCurrent===0 && 
                     <div>
                         <Dragger 
-                            name= 'file'
+                            name= 'UploadFiles'
                             multiple= 'false'
                             action= '//jsonplaceholder.typicode.com/posts/'
                             onChange={this.handleFileUploadChange}
@@ -120,6 +120,7 @@ class PrivateDataCatalogInsert extends Component {
   }
 
   handleFileUploadChange(info) {
+    debugger;
     const status = info.file.status;
     if (status !== 'uploading') {
       console.log(info.file, info.fileList);
