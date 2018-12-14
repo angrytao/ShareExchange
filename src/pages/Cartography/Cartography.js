@@ -15,7 +15,7 @@ let enums = {
 
 class Cartography extends Component {
   state = {
-    activePanel: enums.MapSetting,
+    activePanel: enums.DrawTool,
   };
 
   getActiveCls(panelType) {
@@ -35,7 +35,6 @@ class Cartography extends Component {
       this.map.setTitle(e.data);
     });
     this.mapSetting.on('mapContentChange', e => {
-      //this.map.setContent(e.data);
       this.map.toggleMapContent(e.data.showContent, e.data.content);
     });
     this.mapSetting.on('mapScaleChange', e => {
@@ -56,9 +55,14 @@ class Cartography extends Component {
     this.mapSetting.on('showMousePosition', e => {
       this.map.toggleMousePosition(e.data);
     });
-
     this.map.on('baseMapChange', e => {
       this.mapSetting.setState({ baseMap: e.data[0], showAnno: true });
+    });
+
+    this.drawTool.initDrawTools(this.map.map);
+
+    this.drawTool.on('markerDrawed', e => {
+      console.log(e.data);
     });
   }
 
@@ -105,10 +109,10 @@ class Cartography extends Component {
         </div>
         <div className={st.toolpanel}>
           <div className={this.getActiveCls(enums.DrawTool)}>
-            <DrawTool />
+            <DrawTool ref={e => (this.drawTool = e)} />
           </div>
           <div className={this.getActiveCls(enums.LayerControl)}>
-            <LayerControl />
+            <LayerControl ref={e => (this.layerControl = e)} />
           </div>
           <div className={this.getActiveCls(enums.MapSetting)}>
             <MapSetting ref={e => (this.mapSetting = e)} />
