@@ -1,22 +1,31 @@
-import { Component } from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+import React,{ Component,Fragment } from 'react';
+import Header from './Header';
+import Banner from './Banner';
+import ContentData from './ContentData';
+import ContentMap from './ContentMap';
+import ContentCatalog from './ContentCatalog';
+import ContentCase from './ContentCase';
+import Footer from './Footer';
+import { BackTop } from 'antd';
 import st from './Home.less';
-
-import DataExchange from '../DataExchange/DataExchange';
-import Cartography from '../Cartography/Cartography';
+import '../Iconfont/iconfont.css';
 
 class Home extends Component {
+
   render() {
     console.log(this.props);
     return (
-      <div className={st.Home}>
-        <Link to="/dataexchange">数据</Link>
-        <Link to="/cartography">制图</Link>
-        <Switch>
-          <Route path="/home/dataexchange" component={DataExchange} />
-          <Route path="/home/cartography" component={Cartography} />
-        </Switch>
-      </div>
+      <Fragment>
+        <Header />
+        <Banner />
+        <ContentData id="ContentData"/>
+        <ContentMap id="ContentMap"/>
+        <ContentCatalog id="ContentCatalog"/>
+        <ContentCase id="ContentCase"/>
+        <Footer />
+        <BackTop />
+      </Fragment>
+
     );
   }
 }
