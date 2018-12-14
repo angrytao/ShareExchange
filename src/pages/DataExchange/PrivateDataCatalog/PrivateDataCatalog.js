@@ -112,13 +112,13 @@ class PrivateDataCatalog extends Component {
       const searchContent = this.state.searchCatalogValue;
       const DataCatalog = window.privateDataCatalog;
       const openDataCatalogData = typeof (searchContent) != "undefined" ? DataCatalog.filter(item => item.ShareDataTitle.indexOf(searchContent) >= 0) : DataCatalog;
-      const action = initPrivateDataList(openDataCatalogData,'');
+      const action = initPrivateDataList([...openDataCatalogData],'');
       store.dispatch(action);
   }
 
   //重置开放数据目录
   handleResetOpenDataCatalog = (e) => {
-      const action = initPrivateDataList(window.privateDataCatalog,'');
+      const action = initPrivateDataList([...window.privateDataCatalog],'');
       store.dispatch(action);
   }
 
