@@ -1,7 +1,126 @@
-@import '~@/default.less';
+@import '../../../default.less';
 .Map {
     height: 100%;
     width: 100%;
+    overflow: hidden; // background: red;
+    .title {
+        z-index: 999;
+        position: absolute;
+        top: 10px;
+        left: 20px; // font-size: 40px;
+        // font-weight: 700;
+        // font-family: 宋体;
+        // color: black;
+        // text-shadow: 2px 2px 5px white, 3px 3px 5px black;
+    }
+    .content {
+        z-index: 999;
+        position: absolute;
+        left: 5px;
+        bottom: 30px;
+        background: white;
+        box-shadow: @box-shadow;
+        padding: 10px 20px;
+        border-radius: 3px;
+        font-size: 15px;
+        max-width: 500px;
+        word-break: break-all;
+    }
+    .toolbar {
+        z-index: 999;
+        position: absolute;
+        right: 5px;
+        bottom: 5px;
+        border-radius: 3px;
+        overflow: hidden;
+        box-shadow: @box-shadow;
+        >span {
+            display: block;
+            padding: 5px 10px;
+            text-align: center;
+            cursor: pointer;
+            background: white;
+            transition: 0.3s;
+            font-size: 18px;
+            font-weight: 700;
+            &:not(:first-child) {
+                border-top: 1px solid #eee;
+            }
+            &:hover {
+                background: @primary-color;
+                color: white;
+            }
+            :global {
+                .iconfont {
+                    font-size: 20px;
+                }
+            }
+        }
+        :global {
+            .none {
+                display: none;
+            }
+        }
+    }
+}
+
+.measurebar {
+    position: relative;
+    z-index: 9;
     overflow: hidden;
-    // background: red;
+    >span {
+        display: inline-block;
+        padding: 5px 12px;
+        transition: 0.3s; // font-size: 20px;
+        cursor: pointer;
+        &:not(:first-child) {
+            border-left: 1px dotted @border-color;
+        }
+        &:hover {
+            color: white;
+            background: @primary-color;
+        }
+    }
+}
+
+.basemap {
+    display: flex;
+    >div {
+        width: 80px;
+        height: 80px;
+        position: relative;
+        box-shadow: 0 0 0 1px @border-color;
+        border-radius: 3px;
+        transition: 0.3s;
+        overflow: hidden;
+        background-size: 100% 100%;
+        cursor: pointer;
+        &:hover {
+            box-shadow: 0 0 5px 1px @primary-color;
+        }
+        &:first-child {
+            background-image: url(../../../assets/bg-vec.png);
+        }
+        &:last-child {
+            margin-left: 10px;
+            background-image: url(../../../assets/bg-img.png);
+        }
+        >div {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            text-align: center;
+            padding: 3px 0;
+            background: rgba(255, 255, 255, 0.8);
+            color: black;
+        }
+    }
+}
+
+:global {
+    .measurebar-popover {
+        .ant-popover-inner-content {
+            padding: 0;
+        }
+    }
 }
