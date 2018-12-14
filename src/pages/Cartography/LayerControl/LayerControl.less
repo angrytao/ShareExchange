@@ -1,5 +1,21 @@
 @import '~@/default.less';
-
-.LayerControl{
-
+.LayerControl {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    .layers,
+    .editpanel {
+        flex: 1;
+        overflow: auto;
+        border: 1px solid #eee;
+        border-radius: 3px;
+        padding: 5px;
+    }
+    .layers {
+        margin-top: 10px;
+    }
+    .editpanel {
+        flex: 2;
+    }
 }

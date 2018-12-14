@@ -1,6 +1,19 @@
 @import '~@/default.less';
-
-.MapSetting{
+.MapSetting {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    .header {
+        padding: 10px 10px 0 10px;
+    }
+    .body {
+        flex: 1;
+        overflow: auto;
+        >div {
+            padding: 10px;
+        }
+    }
     .itemcontent {
         flex-wrap: wrap;
         >input,

@@ -1,0 +1,62 @@
+@import '~@/default.less';
+.FontSetting {
+    .edititem {
+        display: flex;
+        width: 220px;
+        align-items: center;
+        padding: 0 10px;
+        margin: 2px 0;
+        .border;
+        border-style: dashed;
+        .color {
+            margin-right: 5px;
+            width: 18px;
+            height: 18px;
+            box-shadow: @bs;
+            border-radius: 3px;
+        }
+        .valuebar {
+            flex: 1;
+        }
+        .value {
+            width: 40px;
+            text-align: center;
+        }
+    }
+    .itemcontent {
+        flex-wrap: wrap;
+        >input,
+        >textarea {
+            width: 220px;
+            margin: 5px 0;
+        }
+    }
+    .fontstyle {
+        .border;
+        background: white;
+        >span {
+            display: inline-block;
+            padding: 4px 0;
+            width: 30px;
+            text-align: center;
+            transition: 0.3s;
+            &:not(:first-child) {
+                border-left: 1px solid @border-color;
+            }
+            &:hover {
+                background: @primary-color;
+                color: white;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.popover {
+    // background-color: red;
+    :global {
+        .ant-popover-inner-content {
+            padding: 0;
+        }
+    }
+}

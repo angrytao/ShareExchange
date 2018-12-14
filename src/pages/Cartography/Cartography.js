@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import st from './Cartography.less';
+import '../../refs/__Extends__';
 
 import DrawTool from './DrawTool/DrawTool';
 import LayerControl from './LayerControl/LayerControl';
@@ -24,6 +25,41 @@ class Cartography extends Component {
 
   changePanel(panelType) {
     this.setState({ activePanel: panelType });
+  }
+
+  componentDidMount() {
+    this.mapSetting.on('baseMapChange', e => {
+      this.map.changeBaseMap(e.data.types);
+    });
+    this.mapSetting.on('mapTitleChange', e => {
+      this.map.setTitle(e.data);
+    });
+    this.mapSetting.on('mapContentChange', e => {
+      //this.map.setContent(e.data);
+      this.map.toggleMapContent(e.data.showContent, e.data.content);
+    });
+    this.mapSetting.on('mapScaleChange', e => {
+      this.map.setScale(e.data);
+    });
+    this.mapSetting.on('mapZoomChange', e => {
+      this.map.setZoom(e.data);
+    });
+    this.mapSetting.on('showLevelChange', e => {
+      this.map.toggleLevel(e.data);
+    });
+    this.mapSetting.on('showMeasureChange', e => {
+      this.map.toggleMeasure(e.data);
+    });
+    this.mapSetting.on('showBaseMapChange', e => {
+      this.map.toggleBaseMapToggle(e.data);
+    });
+    this.mapSetting.on('showMousePosition', e => {
+      this.map.toggleMousePosition(e.data);
+    });
+
+    this.map.on('baseMapChange', e => {
+      this.mapSetting.setState({ baseMap: e.data[0], showAnno: true });
+    });
   }
 
   render() {
@@ -75,11 +111,11 @@ class Cartography extends Component {
             <LayerControl />
           </div>
           <div className={this.getActiveCls(enums.MapSetting)}>
-            <MapSetting />
+            <MapSetting ref={e => (this.mapSetting = e)} />
           </div>
         </div>
         <div className={st.map}>
-          <Map />
+          <Map ref={e => (this.map = e)} />
         </div>
       </div>
     );
