@@ -1,10 +1,11 @@
 import { Component, Fragment } from 'react';
 import { Steps, Icon, Input, Button, Modal, message, Upload, Radio, Select } from 'antd';
 import { uploadShareDataFile } from '../../../Common/requestUrl';
-import { PrivateDataCatalogInsertDataView } from './PrivateDataCatalogInsertDataView';
+import PrivateDataCatalogInsertDataView from './PrivateDataCatalogInsertDataView';
 import store from '../../../store';
 import { getUploadFileData,changeUploadFileVisible,setUploadFileStepCurrent,setUploadFileGeomFieldType } from "../../../store/actionCreates";
-import st from './PrivateDataCatalog.less';
+import st from './PrivateDataCatalogInsert.less';
+
 
 //新增数据配置信息
 const steps = [{
@@ -108,7 +109,7 @@ class PrivateDataCatalogInsert extends Component {
                       </RadioGroup>
                       {
                         this.state.uploadFileGeomFieldType==='经纬度' &&
-                        <div style={{marginTop:'10px'}}>
+                        <div style={{margin:'10px 0'}}>
                           <label style={{marginRight:'10px'}}>经度</label>
                           <Select size={"small"} style={{width:100}}>
                             {this.state.uploadFileReturnDataThead.map((item,index) => <Option key={index}>{item}</Option>)}
@@ -121,7 +122,7 @@ class PrivateDataCatalogInsert extends Component {
                       }
                       {
                         this.state.uploadFileGeomFieldType==='WKT格式' &&
-                        <div style={{marginTop:'10px'}}>
+                        <div style={{margin:'10px 0'}}>
                           <label style={{marginRight:'10px'}}>空间字段</label>
                           <Select size={"small"} style={{width:100}}>
                             {this.state.uploadFileReturnDataThead.map((item,index) => <Option key={index}>{item}</Option>)}
@@ -130,8 +131,9 @@ class PrivateDataCatalogInsert extends Component {
                       }
                       {
                         this.state.uploadFileGeomFieldType==='不含空间字段' &&
-                        <div style={{marginTop:'10px'}}>不含位置信息，将以普通表格类型进行上传</div>
+                        <div style={{margin:'10px 0'}}>不含位置信息，将以普通表格类型进行上传</div>
                       }
+         
                       <PrivateDataCatalogInsertDataView></PrivateDataCatalogInsertDataView>
                     </div>
                 }
