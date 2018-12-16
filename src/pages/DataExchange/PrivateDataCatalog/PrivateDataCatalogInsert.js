@@ -2,6 +2,7 @@ import { Component, Fragment } from 'react';
 import { Steps, Icon, Button, Modal, message } from 'antd';
 import PrivateDataCatalogInsertDataView from './PrivateDataCatalogInsertDataView';
 import PrivateDataCatalogInsertDragger from './PrivateDataCatalogInsertDragger';
+import PrivateDataCatalogInsertConfig from './PrivateDataCatalogInsertConfig';
 import store from '../../../store';
 import { changeUploadFileVisible,setUploadFileStepCurrent } from "../../../store/actionCreates";
 import st from './PrivateDataCatalogInsert.less';
@@ -83,7 +84,8 @@ class PrivateDataCatalogInsert extends Component {
                     </div>
                 }
                 {
-                    this.state.uploadFileStepCurrent===2 && <div>333</div>
+                    this.state.uploadFileStepCurrent===2 && 
+                    <PrivateDataCatalogInsertConfig></PrivateDataCatalogInsertConfig>
                 }
             </div>
             <div className={st.stepsAction}>
