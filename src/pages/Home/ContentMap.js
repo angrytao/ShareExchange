@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col, Button } from 'antd';
+import { Link } from 'react-router-dom';
 import cmapPic from '../images/cMap.png';
 import cmapPic1 from '../images/cMapSyb.png';
 import cmapPic2 from '../images/cMapArc.png';
@@ -21,7 +22,7 @@ const ContentMap = (props) =>{
                         </div>
                         <img src={cmapPic} className={st.content_Map_rightImg}></img>
                         <div style={{textAlign:'center',marginTop:'30px'}}>
-                            <Button type="primary" size="large" icon="edit">开始在线制图</Button>
+                        <Link to='/cartography'>开始在线制图</Link>
                         </div>
                     </Col>
                     <Col span={2}></Col>
