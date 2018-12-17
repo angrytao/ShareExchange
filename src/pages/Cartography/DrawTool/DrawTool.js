@@ -4,50 +4,29 @@ import { Switch, Tooltip, Icon, Slider, Popconfirm } from 'antd';
 import EditMarker from './EditMarker';
 import EditPolygon from './EditPolygon';
 import EditPolyline from './EditPolyline';
-
 import st from './DrawTool.less';
 import std from '../default.less';
 
-let getCircleMarker = cfg => {
-  let { size, shadowSize, color } = cfg;
-  let { r, g, b } = color;
-
-  (size = size || dfSMarker.size),
-    (r = r || dfSMarker.color.r),
-    (g = g || dfSMarker.color.g),
-    (b = b || dfSMarker.color.b),
-    (shadowSize = shadowSize || dfSMarker.shadowSize);
-
-  let icon = L.divIcon({
-    html: `<div class="circle-marker" style="background:rgb(${r},${g},${b},0.8);box-shadow:0 0 0 ${shadowSize ||
-      dfSMarker.shadowSize}px rgba(${r},${g},${b},0.2)"></div>`,
-    iconSize: [size, size],
-    className: 'ct-divicon',
-  });
-  return icon;
-};
-
-let dfSMarker = {
-  type: 'circleMarker',
-  size: 12,
-  shadowSize: 3,
-  color: {
-    r: 255,
-    g: 0,
-    b: 0,
-  },
-};
-
-// let dfMarker = getCircleMarker(dfSMarker),
-//   dfLine = null,
-//   dfPolygon = null,
-//   dfText = null;
+import {
+  getCircleMarker,
+  getPictureMarker,
+  dfCircleMarkerStyle,
+  dfPolylineStyle,
+  dfPolygonStyle,
+  getLineSymbol,
+  getPolygonSymbol,
+} from '../Map/icons';
 
 class DrawTool extends Component {
   index = 1;
-  markerStyle = dfSMarker;
+  markerStyle = dfCircleMarkerStyle;
+  lineStyle = dfPolylineStyle;
+  polygonStyle = dfPolygonStyle;
+
   layers = {};
   state = {
+    reloadEditPanel: false,
+    layerId: null,
     layers: {},
   };
 
@@ -66,7 +45,7 @@ class DrawTool extends Component {
       case 'circleMarker':
         return getCircleMarker(style);
       default:
-        return L.marker();
+        return getPictureMarker(style);
     }
   }
 
@@ -93,6 +72,10 @@ class DrawTool extends Component {
           id: id,
         };
 
+        layer.on('click', e => {
+          this.editFeature(id);
+        });
+
         this.layers[id] = l;
 
         this.fire('markerDrawed', l);
@@ -104,9 +87,66 @@ class DrawTool extends Component {
         this.setState({ layers: layers });
       });
 
-      this.drawLine = new L.Draw.Polyline(map);
-      this.drawPolygon = new L.Draw.Polyline(map);
-      this.drawText = new L.Draw.Marker(map);
+      this.drawLine = new L.Draw.Polyline(map, getLineSymbol(this.lineStyle));
+
+      this.drawLine.on(L.Draw.Event.CREATED, e => {
+        let { layer } = e;
+        layer.addTo(this.drawLayer);
+        let id = '' + this.index++;
+
+        let l = {
+          type: 'line',
+          layer: layer,
+          style: {
+            ...this.lineStyle,
+          },
+          id: id,
+        };
+
+        layer.on('click', e => {
+          this.editFeature(id);
+        });
+
+        this.layers[id] = l;
+
+        this.fire('lineDrawed', l);
+        let { layers } = this.state;
+        layers[l.id] = {
+          type: l.type,
+          id: l.id,
+        };
+        this.setState({ layers: layers });
+      });
+
+      this.drawPolygon = new L.Draw.Polygon(map, getPolygonSymbol(this.polygonStyle));
+      this.drawPolygon.on(L.Draw.Event.CREATED, e => {
+        let { layer } = e;
+        layer.addTo(this.drawLayer);
+        let id = '' + this.index++;
+
+        let l = {
+          type: 'polygon',
+          layer: layer,
+          style: {
+            ...this.polygonStyle,
+          },
+          id: id,
+        };
+
+        layer.on('click', e => {
+          this.editFeature(id);
+        });
+
+        this.layers[id] = l;
+
+        this.fire('polygonDrawed', l);
+        let { layers } = this.state;
+        layers[l.id] = {
+          type: l.type,
+          id: l.id,
+        };
+        this.setState({ layers: layers });
+      });
     }
   }
 
@@ -115,25 +155,40 @@ class DrawTool extends Component {
     this.drawMarker.enable();
   }
 
-  activeDrawLine() {}
+  activeDrawLine() {
+    this.disabledTools();
+    this.drawLine.enable();
+  }
 
-  activeDrawPolygon() {}
-
-  activeDrawText() {}
+  activeDrawPolygon() {
+    this.disabledTools();
+    this.drawPolygon.enable();
+  }
 
   disabledTools() {
     this.drawMarker.disable();
     this.drawLine.disable();
     this.drawPolygon.disable();
-    this.drawText.disable();
   }
 
-  centerMarker(id) {
+  refreshDrawItemTitle(id, title) {
+    if (this.state.layers[id]) {
+      this.state.layers[id].title = title;
+      this.setState({});
+    }
+  }
+
+  centerFeature(id) {
     if (id) {
       let layer = this.layers[id];
       if (layer) {
-        let latlng = layer.layer._latlng;
-        this.map.setView(latlng, 16);
+        if (layer.type === 'marker') {
+          let latlng = layer.layer._latlng;
+          this.map.setView(latlng, 16);
+        } else {
+          let bounds = layer.layer.getBounds();
+          this.map.fitBounds(bounds, { padding: [50, 50] });
+        }
       }
     }
   }
@@ -142,9 +197,14 @@ class DrawTool extends Component {
     if (id) {
       let layer = this.layers[id];
       if (layer) {
-        let latlng = layer.layer.remove();
+        // 直接remove，在切换this.drawLayer可见性的时候会导致删除掉的重现
+        this.drawLayer.removeLayer(layer.layer);
         this.layers[id] = null;
         delete this.layers[id];
+      }
+      // 如果是正在编辑的要素
+      if (id === this.state.layerId) {
+        this.state.layerId = null;
       }
       this.state.layers[id] = null;
       delete this.state.layers[id];
@@ -157,48 +217,103 @@ class DrawTool extends Component {
     let items = [];
     for (let i in layers) {
       let item = layers[i];
+      let icon = null;
       switch (item.type) {
         case 'marker':
-          items.push(
-            <div>
-              <span className="iconfont icon-location" />
-              <span
-                onClick={e => {
-                  this.centerMarker(item.id);
-                }}
-              >
-                {item.title || item.id}
-              </span>
-              <span>
-                <Tooltip placement="top" title="编辑要素">
-                  <Icon
-                    type="edit"
-                    onClick={e => {
-                      this.editMarker(item.id);
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip placement="top" title="删除要素">
-                  <Popconfirm
-                    title="确定删除该要素"
-                    onConfirm={e => {
-                      this.deleteFeature(item.id);
-                    }}
-                    okText="确定"
-                    cancelText="取消"
-                  >
-                    <Icon type="delete" />
-                  </Popconfirm>
-                </Tooltip>
-              </span>
-            </div>
-          );
+          icon = 'icon-location';
+          break;
+        case 'line':
+          icon = 'icon-xian';
+          break;
+        case 'polygon':
+          icon = 'icon-polygon';
+          break;
+        default:
+          break;
       }
+      items.push(
+        <div>
+          <span className={`iconfont ${icon}`} />
+          <span
+            onClick={e => {
+              this.centerFeature(item.id);
+            }}
+          >
+            {item.title || item.id}
+          </span>
+          <span>
+            <Tooltip placement="top" title="编辑要素">
+              <Icon
+                type="edit"
+                onClick={e => {
+                  this.editFeature(item.id);
+                }}
+              />
+            </Tooltip>
+            <Tooltip placement="top" title="删除要素">
+              <Popconfirm
+                title="确定删除该要素"
+                onConfirm={e => {
+                  this.deleteFeature(item.id);
+                }}
+                okText="确定"
+                cancelText="取消"
+              >
+                <Icon type="delete" />
+              </Popconfirm>
+            </Tooltip>
+          </span>
+        </div>
+      );
     }
     return items;
   }
 
+  editFeature(id) {
+    this.setState({ reloadEditPanel: true }, e =>
+      this.setState({ reloadEditPanel: false, layerId: id })
+    );
+  }
+
+  resetMarkerIcon(style, icon) {
+    this.markerStyle = style;
+    this.drawMarker.setOptions({ icon: icon });
+  }
+
+  resetLineStyle(style) {
+    this.lineStyle = style;
+    this.drawLine.setOptions(getLineSymbol(style));
+  }
+
+  resetPolygonStyle(style) {
+    this.polygonStyle = style;
+    this.drawPolygon.setOptions(getPolygonSymbol(style));
+  }
+
+  getEditPanel() {
+    let cmp = null;
+    let { layerId } = this.state;
+    if (layerId) {
+      let lo = this.layers[layerId];
+      if (lo) {
+        switch (lo.type) {
+          case 'marker':
+            cmp = <EditMarker config={lo} parent={this} />;
+            break;
+          case 'line':
+            cmp = <EditPolyline config={lo} parent={this} />;
+            break;
+          case 'polygon':
+            cmp = <EditPolygon config={lo} parent={this} />;
+            break;
+        }
+      }
+    }
+    return cmp;
+  }
+
   render() {
+    let { reloadEditPanel } = this.state;
     return (
       <div className={st.DrawTool}>
         <div className={`${std.h1} iconfont icon-tuceng`}>绘制地图要素</div>
@@ -233,9 +348,9 @@ class DrawTool extends Component {
               <Tooltip placement="top" title="绘制面">
                 <span className="iconfont icon-polygon" onClick={e => this.activeDrawPolygon()} />
               </Tooltip>
-              <Tooltip placement="top" title="添加文字">
+              {/* <Tooltip placement="top" title="添加文字">
                 <span className="iconfont icon-wenzi" onClick={e => this.activeDrawText()} />
-              </Tooltip>
+              </Tooltip> */}
             </div>
           </div>
         </div>
@@ -452,9 +567,7 @@ class DrawTool extends Component {
             <div className={std.fitem_st}>编辑绘制的地图要素</div>
           </div>
         </div>
-        <div className={st.editpanel}>
-          <EditPolyline />
-        </div>
+        <div className={st.editpanel}>{reloadEditPanel ? null : this.getEditPanel()}</div>
       </div>
     );
   }

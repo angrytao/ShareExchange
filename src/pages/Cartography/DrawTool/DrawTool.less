@@ -66,3 +66,30 @@
         }
     }
 }
+
+:global {
+    .ct-draw-popup {
+        width: 240px;
+        &>div {
+            padding: 5px;
+            &:first-child {
+                font-size: 14px;
+                font-weight: 700;
+                color: black;
+                border-bottom: 1px dotted #ccc;
+            }
+            &:last-child {
+                font-size: 12px;
+            }
+        }
+    }
+    .ct-draw-transparent {
+        background: none;
+        border: 0;
+        box-shadow: none;
+        // text-shadow: 1px 1px white;
+        &::before {
+            display: none;
+        }
+    }
+}
