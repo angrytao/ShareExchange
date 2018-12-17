@@ -6,7 +6,8 @@ import {
     PRIVATEDATACATALOG_GET_UPLOADFILEDATA,
     PRIVATEDATACATALOG_CHANGE_UPLOADFILEVISIBLE,
     PRIVATEDATACATALOG_SET_UPLOADFILESTEPCURRENT,
-    PRIVATEDATACATALOG_SET_UPLOADFILEGEOMFIELDTYPE
+    PRIVATEDATACATALOG_SET_UPLOADFILEGEOMFIELDTYPE,
+    PRIVATEDATACATALOG_GET_UPLOADFILEGEOMFIELD
 } from './actionTypes';
 
 const defaultState = {
@@ -21,6 +22,7 @@ const defaultState = {
     uploadFileVisible:false,
     uploadFileStepCurrent:0,
     uploadFileGeomFieldType:'经纬度',           //经纬度|WKT格式|不含空间字段
+    uploadFileGeomField:{},
     //Selector
     tagList: [],             //'统计','财政税收','交通','安全','测绘','医疗卫生','教育','社区'
     selectedTag:'',
@@ -87,6 +89,13 @@ export default (state = defaultState, action) => {
     if(action.type === PRIVATEDATACATALOG_SET_UPLOADFILEGEOMFIELDTYPE){
         const newState = JSON.parse(JSON.stringify(state));
         newState.uploadFileGeomFieldType = action.value;
+        return newState;
+    }
+
+    //PrivateData 上传文件模块空间字段配置
+    if(action.type === PRIVATEDATACATALOG_GET_UPLOADFILEGEOMFIELD){
+        const newState = JSON.parse(JSON.stringify(state));
+        newState.uploadFileGeomField = action.value;
         return newState;
     }
     return state;
