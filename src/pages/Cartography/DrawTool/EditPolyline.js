@@ -3,42 +3,81 @@ import { Switch, Slider, Popover, Dropdown, Menu, Icon, Input, Select, Radio } f
 import { SketchPicker } from 'react-color';
 import st from './EditPolyline.less';
 import std from '../default.less';
+import { getLineSymbol } from '../Map/icons';
 
 class EditPolyline extends Component {
+  constructor(ps) {
+    super(ps);
+    let { type, edit, style, popup } = ps.config;
+    this.state.edit = edit;
+    this.state.type = type;
+    this.state.popup = popup || this.state.popup;
+    this.state.style = style || this.state.style;
+  }
+
   state = {
     edit: false,
-    borderColor: 'red',
-    borderWidth: 2,
-    borderStyle: 'solid',
-    showPopup: false,
-    title: '',
-    content: '',
-    showMark: false,
-    markPosition:"top",
-    markFontFamily: '宋体',
-    markColor: 'red',
-    markFontSize: '14',
-    markHaloColor: 'red',
-    markHaloRadius: 5,
+    type: null,
+    style: {},
+    popup: {
+      show: false,
+      title: '',
+      content: '',
+    },
   };
 
+  toggleEditGeometry(edit) {
+    let { config } = this.props;
+    if (config.layer) {
+      this.props.config.edit = edit;
+      if (edit) {
+        config.layer.editing.enable();
+      } else {
+        config.layer.editing.disable();
+      }
+    }
+  }
+
+  resetItemTitle() {
+    let { parent } = this.props;
+    let { config } = this.props;
+    if (config.id) {
+      let title = config.popup && config.popup.title;
+      parent.refreshDrawItemTitle(config.id, title);
+    }
+  }
+
+  resetPopup() {
+    let { popup } = this.state;
+    let { config } = this.props;
+    if (config.layer) {
+      config.popup = popup;
+      if (popup && popup.show && (popup.title || popup.content)) {
+        config.layer
+          .bindPopup(
+            `<div class="ct-draw-popup"><div>${popup.title}</div><div>${popup.content}</div></div>`
+          )
+          .openPopup();
+      } else {
+        // 先关闭 后取消绑定
+        config.layer.closePopup().unbindPopup();
+      }
+    }
+  }
+
+  resetStyle() {
+    let { config, parent } = this.props;
+    if (config.layer) {
+      let { style } = this.state;
+      let nStyle = getLineSymbol(style);
+      config.style = style;
+      parent.resetLineStyle(style);
+      config.layer.setStyle(nStyle.shapeOptions);
+    }
+  }
+
   render() {
-    let {
-      edit,
-      borderColor,
-      borderWidth,
-      borderStyle,
-      showPopup,
-      title,
-      content,
-      showMark,
-      markPosition,
-      markFontFamily,
-      markColor,
-      markFontSize,
-      markHaloColor,
-      markHaloRadius,
-    } = this.state;
+    let { edit, style, popup, mark } = this.state;
     return (
       <div className={st.EditPolyline}>
         <div className={std.fitem}>
@@ -62,6 +101,7 @@ class EditPolyline extends Component {
                 checked={edit}
                 onChange={e => {
                   this.setState({ edit: e });
+                  this.toggleEditGeometry(e);
                 }}
               />
             </div>
@@ -76,31 +116,53 @@ class EditPolyline extends Component {
                   overlayClassName={st.popover}
                   content={
                     <SketchPicker
-                      color={borderColor}
+                      color={`rgba(${style.color.r},${style.color.g},${style.color.b},${
+                        style.color.a
+                      })`}
                       onChange={e => {
                         let { r, g, b, a } = e.rgb;
-                        this.setState({ borderColor: `rgba(${r},${g},${b},${a})` });
+                        let { style } = this.state;
+                        style.color = { r, g, b, a };
+                        this.resetStyle();
+                        this.setState({ style: style });
                       }}
                     />
                   }
                   trigger="click"
                 >
-                  <div className={st.color} style={{ background: borderColor }} />
+                  <div
+                    className={st.color}
+                    style={{
+                      background: `rgba(${style.color.r},${style.color.g},${style.color.b},${
+                        style.color.a
+                      })`,
+                    }}
+                  />
                 </Popover>
                 <div className={st.valuebar}>
                   <Slider
-                    min={0}
-                    max={10}
-                    defaultValue={borderWidth}
-                    onChange={e => this.setState({ borderWidth: e })}
+                    min={1}
+                    max={15}
+                    value={style.weight}
+                    onChange={e => {
+                      let { style } = this.state;
+                      style.weight = e;
+                      this.resetStyle();
+                      this.setState({ style: style });
+                    }}
                   />
                 </div>
-                <div className={st.value}>{borderWidth}</div>
+                <div className={st.value}>{style.weight}</div>
                 <div>
                   <Select
                     size="small"
-                    value={borderStyle}
-                    onChange={e => this.setState({ borderStyle: e })}
+                    value={style.dashArray || 'solid'}
+                    onChange={e => {
+                      let { style } = this.state;
+                      style.dashArray = e;
+                      this.resetStyle();
+                      this.setState({ style: style });
+                    }}
                     style={{ width: 65 }}
                   >
                     <Select.Option value="solid">实线</Select.Option>
@@ -123,30 +185,53 @@ class EditPolyline extends Component {
               <Switch
                 checkedChildren="开"
                 unCheckedChildren="关"
-                checked={showPopup}
-                onChange={e => this.setState({ showPopup: e })}
+                checked={popup.show}
+                onChange={e => {
+                  let { popup } = this.state;
+                  popup.show = e;
+                  this.resetPopup();
+                  this.setState({ popup: popup });
+                }}
               />
             </div>
           </div>
-          <div className={std.fitem} style={{ alignItems: 'baseline' }}>
+          <div className={std.fitem}>
             <div className={std.fitem_t}>
-              <div className={std.fitem_mt}>内容</div>
+              <div className={std.fitem_mt}>标题</div>
             </div>
             <div className={`${std.fitem_i} ${st.itemcontent}`}>
               <Input
                 placeholder="标题"
-                value={title}
-                onChange={e => this.setState({ title: e.target.value })}
+                value={popup.title}
+                onChange={e => {
+                  let { popup } = this.state;
+                  popup.title = e.target.value;
+                  this.resetItemTitle();
+                  this.resetPopup();
+                  this.setState({ popup: popup });
+                }}
               />
+            </div>
+          </div>
+          <div className={std.fitem}>
+            <div className={std.fitem_t}>
+              <div className={std.fitem_mt}>内容</div>
+            </div>
+            <div className={`${std.fitem_i} ${st.itemcontent}`}>
               <Input.TextArea
                 placeholder="内容"
-                value={content}
-                onChange={e => this.setState({ content: e.target.value })}
+                value={popup.content}
+                onChange={e => {
+                  let { popup } = this.state;
+                  popup.content = e.target.value;
+                  this.resetPopup();
+                  this.setState({ popup: popup });
+                }}
               />
             </div>
           </div>
         </div>
-        <div className={std.slider} />
+        {/* <div className={std.slider} />
         <div className={std.group}>
           <div className={std.fitem}>
             <div className={std.fitem_t}>
@@ -266,8 +351,8 @@ class EditPolyline extends Component {
                 <div className={st.value}>{markHaloRadius}</div>
               </div>
             </div>
-          </div>
-        </div>
+          </div> 
+        </div>*/}
       </div>
     );
   }
