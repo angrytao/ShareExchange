@@ -35,9 +35,15 @@ L.TileLayer.TDTJX = L.TileLayer.extend({
 
       d: {
         // url: 'http://220.191.220.90/JXEMAP/service/wmts',
-        url: 'http://www.jxmap.gov.cn/JXEMAP/service/wmts ',
+        // url: 'http://www.jxmap.gov.cn/JXEMAP/service/wmts ',
+        // options: {
+        //   layer: 'JXEMAP',
+        //   tilematrixSet: 'TileMatrixSet0',
+        //   format: 'image/png',
+        // },
+        url: 'http://map.pinghu.gov.cn/geoservices/PHEMAP_205101/service/WMTS',
         options: {
-          layer: 'JXEMAP',
+          layer: 'PHEMAP_205101',
           tilematrixSet: 'TileMatrixSet0',
           format: 'image/png',
         },
@@ -62,9 +68,15 @@ L.TileLayer.TDTJX = L.TileLayer.extend({
       },
       d: {
         // url: 'http://220.191.220.90/JXEMAPANNO/service/wmts',
-        url: 'http://www.jxmap.gov.cn/JXEMAPANNO/service/wmts',
+        // url: 'http://www.jxmap.gov.cn/JXEMAPANNO/service/wmts',
+        // options: {
+        //   layer: 'JXEMAPANNO',
+        //   tilematrixSet: 'TileMatrixSet0',
+        //   format: 'image/png',
+        // },
+        url: 'http://map.pinghu.gov.cn/geoservices/PHEMAPANNO_201501/service/WMTS',
         options: {
-          layer: 'JXEMAPANNO',
+          layer: 'PHEMAPANNO_201501',
           tilematrixSet: 'TileMatrixSet0',
           format: 'image/png',
         },
@@ -89,10 +101,16 @@ L.TileLayer.TDTJX = L.TileLayer.extend({
       },
       d: {
         // url: 'http://220.191.220.90/JXIMG/service/wmts',
-        url: 'http://www.jxmap.gov.cn/JXIMG/service/wmts',
+        // url: 'http://www.jxmap.gov.cn/JXIMG/service/wmts',
+        // options: {
+        //   layer: 'JXIMG',
+        //   tilematrixset: 'TileMatrixSet0',
+        //   format: 'image/png',
+        // },
+        url: 'http://map.pinghu.gov.cn/geoservices/PHIMG_201501/service/WMTS',
         options: {
-          layer: 'JXIMG',
-          tilematrixset: 'TileMatrixSet0',
+          layer: 'PHIMG_201501',
+          tilematrixSet: 'TileMatrixSet0',
           format: 'image/png',
         },
       },
@@ -116,9 +134,15 @@ L.TileLayer.TDTJX = L.TileLayer.extend({
       },
       d: {
         // url: 'http://220.191.220.90/JXIMGANNO/service/wmts',
-        url: 'http://www.jxmap.gov.cn/JXIMGANNO/service/wmts ',
+        // url: 'http://www.jxmap.gov.cn/JXIMGANNO/service/wmts ',
+        // options: {
+        //   layer: 'JXIMGANNO',
+        //   tilematrixset: 'TileMatrixSet0',
+        //   format: 'image/png',
+        // },
+        url: 'http://map.pinghu.gov.cn/geoservices/PHIMGANNO_201501/service/WMTS',
         options: {
-          layer: 'JXIMGANNO',
+          layer: 'PHIMGANNO_201501',
           tilematrixset: 'TileMatrixSet0',
           format: 'image/png',
         },

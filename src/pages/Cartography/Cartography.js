@@ -15,7 +15,7 @@ let enums = {
 
 class Cartography extends Component {
   state = {
-    activePanel: enums.DrawTool,
+    activePanel: enums.LayerControl,
   };
 
   getActiveCls(panelType) {
