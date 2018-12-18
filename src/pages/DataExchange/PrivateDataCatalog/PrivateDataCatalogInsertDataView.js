@@ -16,6 +16,9 @@ class PrivateDataCatalogInsertDataView extends Component{
 
         this.handleGeomFieldTypeChange = this.handleGeomFieldTypeChange.bind(this);
         this.returnCols = this.returnCols.bind(this);
+        this.handleLngChange = this.handleLngChange.bind(this);
+        this.handleLatChange = this.handleLatChange.bind(this);
+        this.handleWktChange = this.handleWktChange.bind(this);
     }
 
     render(){
@@ -28,30 +31,30 @@ class PrivateDataCatalogInsertDataView extends Component{
                         <Radio value={'不含空间字段'}>不含空间字段</Radio>
                       </RadioGroup>
                 {
-                this.state.uploadFileGeomFieldType==='经纬度' &&
-                <div style={{margin:'10px 0'}}>
-                    <label style={{marginRight:'10px'}}>经度</label>
-                    <Select size={"small"} style={{width:100}}>
-                    {this.state.uploadFileReturnDataThead.map((item,index) => <Option key={index}>{item}</Option>)}
-                    </Select>
-                    <label style={{margin:'0 10px'}}>纬度</label>
-                    <Select size={"small"} style={{width:100}}>
-                    {this.state.uploadFileReturnDataThead.map((item,index) => <Option key={index}>{item}</Option>)}
-                    </Select>
-                </div>
+                    this.state.uploadFileGeomFieldType==='经纬度' &&
+                    <div style={{margin:'10px 0'}}>
+                        <label style={{marginRight:'10px'}}>经度</label>
+                        <Select defaultValue={window.selectlng} size={"small"} style={{width:100}} onChange={this.handleLngChange}>
+                        {this.state.uploadFileReturnDataThead.map((item,index) => <Option key={index}>{item}</Option>)}
+                        </Select>
+                        <label style={{margin:'0 10px'}}>纬度</label>
+                        <Select defaultValue={window.selectlat} size={"small"} style={{width:100}} onChange={this.handleLatChange}>
+                        {this.state.uploadFileReturnDataThead.map((item,index) => <Option key={index}>{item}</Option>)}
+                        </Select>
+                    </div>
                 }
                 {
-                this.state.uploadFileGeomFieldType==='WKT格式' &&
-                <div style={{margin:'10px 0'}}>
-                    <label style={{marginRight:'10px'}}>空间字段</label>
-                    <Select size={"small"} style={{width:100}}>
-                    {this.state.uploadFileReturnDataThead.map((item,index) => <Option key={index}>{item}</Option>)}
-                    </Select>
-                </div>
+                    this.state.uploadFileGeomFieldType==='WKT格式' &&
+                    <div style={{margin:'10px 0'}}>
+                        <label style={{marginRight:'10px'}}>空间字段</label>
+                        <Select defaultValue={window.selectWkt}  size={"small"} style={{width:100}} onChange={this.handleWktChange}>
+                        {this.state.uploadFileReturnDataThead.map((item,index) => <Option key={index}>{item}</Option>)}
+                        </Select>
+                    </div>
                 }
                 {
-                this.state.uploadFileGeomFieldType==='不含空间字段' &&
-                <div style={{margin:'10px 0'}}>不含位置信息，将以普通表格类型进行上传</div>
+                    this.state.uploadFileGeomFieldType==='不含空间字段' &&
+                    <div style={{margin:'10px 0'}}>不含位置信息，将以普通表格类型进行上传</div>
                 }
                 <Table columns={this.returnCols()} dataSource={this.state.uploadFileReturnDataTbody} size="small" rowClassName={st.tableRowsFontSize}></Table>
             </Fragment>
@@ -63,7 +66,19 @@ class PrivateDataCatalogInsertDataView extends Component{
         const action = setUploadFileGeomFieldType(selectValue);
         store.dispatch(action);
     }
-      
+
+    handleLngChange = (e) =>{
+        window.selectlng = e;
+    }
+
+    handleLatChange = (e) =>{
+        window.selectlat = e;
+    }
+    
+    handleWktChange = (e) =>{
+        window.selectWkt = e;
+    }
+
     returnCols(){
         const thead = this.state.uploadFileReturnDataThead;
         const cols=[];
