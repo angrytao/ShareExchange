@@ -35,6 +35,10 @@ class PrivateDataCatalogInsertConfigForm extends Component{
             crs: L.CRS.EPSG4490,
             attributionControl: false,
             zoomControl: false,
+            fullscreenControl: true,
+            fullscreenControlOptions: {
+                position: 'topright'
+            }
         });
         L.tileLayer.getGroupLayer(['vec','vec_anno']).addTo(map);
         this.map = map;
@@ -58,7 +62,12 @@ class PrivateDataCatalogInsertConfigForm extends Component{
     handleLatlngAddToMap(data,head){
         let hlat = head[window.selectlat];
         let hlng = head[window.selectlng];
+        let htit = head[window.selectTitle];
         this.currentLayer = L.layerGroup();
+
+        let geoms = [];
+        geoms.push(hlat);
+        geoms.push(hlng);
 
         data.map((item) => {
             let lat = parseFloat(item[hlat]);
@@ -69,7 +78,7 @@ class PrivateDataCatalogInsertConfigForm extends Component{
                 icon:getCircleMarker(this.markerStyle)
             });
             var popup = document.createElement('div');
-            ReactDOM.render(<Popup itemData={item} itemTitle={head[window.selectTitle]}></Popup>,popup);
+            ReactDOM.render(<Popup itemData={item} itemTitle={htit} itemGeom={geoms}></Popup>,popup);
             marker.bindPopup(popup);
             marker.addTo(this.currentLayer);
         });

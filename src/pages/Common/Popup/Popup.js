@@ -1,5 +1,6 @@
 import {Fragment,Component} from 'react';
 import {Table} from 'antd';
+import st from './Popup.less';
 
 const cols = [{
     title:'属性',
@@ -23,11 +24,13 @@ class Popup extends Component{
 
     componentWillMount(){
         let data = this.props.itemData;
+        let geoms = this.props.itemGeom;
         this.state.title = data[this.props.itemTitle];
         
         const list = [];
         for(let key in data){
-            if(key != this.props.itemTitle){
+            //字段过滤标题、空间字段
+            if(key != this.props.itemTitle && geoms.indexOf(key) === -1){
                 list.push({Key:key,Value:data[key]});
             }
         }
@@ -40,8 +43,15 @@ class Popup extends Component{
         console.log(this.state.content);
         return(
             <div>
-                <h3>{this.state.title}</h3>
-                <Table size={"small"} pagination={false} columns={cols} dataSource={this.state.content} scroll={{ y: 200 }}></Table>
+                <h3 className={st.title}>{this.state.title}</h3>
+                <Table 
+                    size={"small"} 
+                    pagination={false} 
+                    columns={cols} 
+                    dataSource={this.state.content} 
+                    scroll={{ y: 200 }}
+                >
+                </Table>
             </div>
         )
     }
