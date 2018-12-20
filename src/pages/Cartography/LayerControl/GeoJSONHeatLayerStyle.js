@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Slider, Input } from 'antd';
+import { Slider, Input, Select } from 'antd';
 import st from './GeoJSONHeatLayerStyle.less';
 import std from '../default.less';
 
@@ -12,13 +12,41 @@ class GeoJSONHeatLayerStyle extends Component {
       radius: config.radius !== undefined ? config.radius : 15,
       blur: config.blur !== undefined ? config.blur : 25,
       name: config.name,
+      gradient:
+        config.gradient !== undefined ? config.gradient : { 0.4: 'blue', 0.65: 'lime', 1: 'red' },
     };
+    console.log(ps.layer);
+  }
+
+  gradients = {
+    default: { 0.4: 'blue', 0.65: 'lime', 1: 'red' },
+    red: { 0.4: '#ffb2b2', 0.65: '#f77171', 1: 'red' },
+    blue: { 0.4: '#b2b2ff', 0.65: '#7171f7', 1: 'blue' },
+    green: { 0.4: '#b2ffb2', 0.65: '#71f771', 1: 'green' },
+  };
+
+  getColorBand() {
+    let cmp = [];
+    for (let x in this.gradients) {
+      let i = this.gradients[x];
+      cmp.push(
+        <Select.Option
+          value={i}
+          style={{
+            background: `linear-gradient(90deg,${i['0.4']},${i['0.65']},${i['1']}`,
+          }}
+        >
+          &emsp;
+        </Select.Option>
+      );
+    }
+    return cmp;
   }
 
   render() {
     let { config } = this.props;
-    let { opacity, radius, blur, name } = this.state;
-
+    let { opacity, radius, blur, name, gradient } = this.state;
+    console.log(`linear-gradient(90deg,${gradient['0.4']},${gradient['0.65']},${gradient['1']})`);
     return (
       <div className={st.GeoJSONHeatLayerStyle}>
         <div className={std.group}>
@@ -42,6 +70,30 @@ class GeoJSONHeatLayerStyle extends Component {
           </div>
         </div>
         <div className={std.group}>
+          <div className={std.fitem}>
+            <div className={std.fitem_t}>
+              <div className={std.fitem_mt}>色带</div>
+            </div>
+            <div className={std.fitem_i}>
+              <Select
+                className={st.colorband}
+                style={{
+                  width: 220,
+                  background: `linear-gradient(90deg,${gradient['0.4']},${gradient['0.65']},${
+                    gradient['1']
+                  })`,
+                }}
+                value={gradient}
+                onChange={e => {
+                  this.props.config.gradient = e;
+                  this.setState({ gradient: e });
+                  this.props.layer.setOptions({ gradient: e });
+                }}
+              >
+                {this.getColorBand()}
+              </Select>
+            </div>
+          </div>
           <div className={std.fitem}>
             <div className={std.fitem_t}>
               <div className={std.fitem_mt}>透明度</div>

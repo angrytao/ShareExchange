@@ -1,5 +1,15 @@
 @import '~@/default.less';
-
-.GeoJSONHeatLayerStyle{
-    
+.GeoJSONHeatLayerStyle {
+    .colorband {
+        :global {
+            .ant-select-selection {
+                background: transparent;
+                border-radius: 0;
+                border: 0;
+                .ant-select-arrow-icon {
+                    color: white;
+                }
+            }
+        }
+    }
 }

@@ -1,5 +1,6 @@
 import { layerTypes, getLayer } from '../Map/layers';
 import { dfCircleMarkerStyle, dfPictureMarkerStyle } from '../Map/icons';
+import './datas';
 
 let layers = [
   {
