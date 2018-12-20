@@ -13,8 +13,8 @@ import {
   dfCircleMarkerStyle,
   dfPolylineStyle,
   dfPolygonStyle,
-  getLineSymbol,
-  getPolygonSymbol,
+  getDrawLineSymbol,
+  getDrawPolygonSymbol,
 } from '../Map/icons';
 
 class DrawTool extends Component {
@@ -40,7 +40,7 @@ class DrawTool extends Component {
     }
   }
 
-  getDrawMarkerSymbol(style) {
+  getMarkerSymbol(style) {
     switch (style.type) {
       case 'circleMarker':
         return getCircleMarker(style);
@@ -55,7 +55,7 @@ class DrawTool extends Component {
       let drawLayer = L.layerGroup().addTo(map);
       this.drawLayer = drawLayer;
       this.drawMarker = new L.Draw.Marker(map, {
-        icon: this.getDrawMarkerSymbol(this.markerStyle),
+        icon: this.getMarkerSymbol(this.markerStyle),
       });
 
       this.drawMarker.on(L.Draw.Event.CREATED, e => {
@@ -87,7 +87,7 @@ class DrawTool extends Component {
         this.setState({ layers: layers });
       });
 
-      this.drawLine = new L.Draw.Polyline(map, getLineSymbol(this.lineStyle));
+      this.drawLine = new L.Draw.Polyline(map, getDrawLineSymbol(this.lineStyle));
 
       this.drawLine.on(L.Draw.Event.CREATED, e => {
         let { layer } = e;
@@ -118,7 +118,7 @@ class DrawTool extends Component {
         this.setState({ layers: layers });
       });
 
-      this.drawPolygon = new L.Draw.Polygon(map, getPolygonSymbol(this.polygonStyle));
+      this.drawPolygon = new L.Draw.Polygon(map, getDrawPolygonSymbol(this.polygonStyle));
       this.drawPolygon.on(L.Draw.Event.CREATED, e => {
         let { layer } = e;
         layer.addTo(this.drawLayer);
@@ -282,12 +282,12 @@ class DrawTool extends Component {
 
   resetLineStyle(style) {
     this.lineStyle = style;
-    this.drawLine.setOptions(getLineSymbol(style));
+    this.drawLine.setOptions(getDrawLineSymbol(style));
   }
 
   resetPolygonStyle(style) {
     this.polygonStyle = style;
-    this.drawPolygon.setOptions(getPolygonSymbol(style));
+    this.drawPolygon.setOptions(getDrawPolygonSymbol(style));
   }
 
   getEditPanel() {

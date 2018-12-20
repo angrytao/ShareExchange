@@ -9,12 +9,42 @@
         right: 10px;
         top: 63px;
         z-index: 1;
-        ;
     }
     :global(.ant-tabs-bar) {
         margin-bottom: 10px;
     }
     .panel {
         height: 340px;
+    }
+    .layeritem {
+        display: flex; // justify-content: center;
+        align-items: center;
+        border-radius: 3px;
+        padding: 5px 20px;
+        box-shadow: 0 0 0 1px #eee;
+        margin: 10px;
+        transition: 0.3s;
+        >* {
+            margin: 0 10px;
+        }
+        .title {
+            flex: 1;
+        }
+        >span {
+            background: @primary-color;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        &:hover {
+            box-shadow: 0 0 3px 1px @primary-color;
+        }
+        i {
+            cursor: pointer;
+            &:hover {
+                color: @primary-color;
+            }
+        }
     }
 }

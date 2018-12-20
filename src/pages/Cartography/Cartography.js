@@ -61,9 +61,7 @@ class Cartography extends Component {
 
     this.drawTool.initDrawTools(this.map.map);
 
-    this.drawTool.on('markerDrawed', e => {
-      console.log(e.data);
-    });
+    this.layerControl.map = this.map.map;
   }
 
   render() {

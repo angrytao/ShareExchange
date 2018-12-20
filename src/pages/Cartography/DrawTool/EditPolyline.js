@@ -3,7 +3,7 @@ import { Switch, Slider, Popover, Dropdown, Menu, Icon, Input, Select, Radio } f
 import { SketchPicker } from 'react-color';
 import st from './EditPolyline.less';
 import std from '../default.less';
-import { getLineSymbol } from '../Map/icons';
+import { getDrawLineSymbol } from '../Map/icons';
 
 class EditPolyline extends Component {
   constructor(ps) {
@@ -69,7 +69,7 @@ class EditPolyline extends Component {
     let { config, parent } = this.props;
     if (config.layer) {
       let { style } = this.state;
-      let nStyle = getLineSymbol(style);
+      let nStyle = getDrawLineSymbol(style);
       config.style = style;
       parent.resetLineStyle(style);
       config.layer.setStyle(nStyle.shapeOptions);

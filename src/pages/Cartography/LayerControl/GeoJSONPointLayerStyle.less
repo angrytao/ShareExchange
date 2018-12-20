@@ -1,0 +1,56 @@
+@import '~@/default.less';
+.GeoJSONPointLayerStyle {
+    .edititem {
+        display: flex;
+        width: 220px;
+        align-items: center;
+        padding: 0 10px;
+        .border;
+        border-style: dashed;
+        .color {
+            margin-right: 5px;
+            width: 18px;
+            height: 18px;
+            box-shadow: @bs;
+            border-radius: 3px;
+        }
+        .valuebar {
+            flex: 1;
+        }
+        .value {
+            width: 40px;
+            text-align: center;
+        }
+    }
+    .itemcontent {
+        flex-wrap: wrap;
+        >input,
+        >textarea {
+            width: 220px;
+            margin: 5px 0;
+        }
+    }
+    .icons {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .iconwrapper {
+        height: 40px;
+        width: 40px;
+        cursor: pointer;
+        border: 1px solid #eee;
+        border-radius: 5px;
+        margin: 3px;
+        padding: 5px;
+        &:hover {
+            background: white;
+        }
+        svg {
+            height: 100%;
+            width: 100%;
+        }
+    }
+    .none {
+        display: none;
+    }
+}

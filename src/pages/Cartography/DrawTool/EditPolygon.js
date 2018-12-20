@@ -3,7 +3,7 @@ import { Switch, Slider, Popover, Dropdown, Menu, Icon, Input, Select, Radio } f
 import { SketchPicker } from 'react-color';
 import st from './EditPolygon.less';
 import std from '../default.less';
-import { getPolygonSymbol } from '../Map/icons';
+import { getDrawPolygonSymbol } from '../Map/icons';
 
 class EditPolygon extends Component {
   constructor(ps) {
@@ -69,7 +69,7 @@ class EditPolygon extends Component {
     let { config, parent } = this.props;
     if (config.layer) {
       let { style } = this.state;
-      let nStyle = getPolygonSymbol(style);
+      let nStyle = getDrawPolygonSymbol(style);
       config.style = style;
       parent.resetPolygonStyle(style);
       config.layer.setStyle(nStyle.shapeOptions);

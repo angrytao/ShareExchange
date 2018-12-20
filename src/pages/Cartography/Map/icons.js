@@ -72,36 +72,36 @@ let svgIcons = [
     category: 'normal',
     name: '常用',
     icons: [
-      'icon-yiyuan1',
+      'icon-weizhi',
+      'icon-fujinmendianweizhi',
+      'icon-flag',
+      'icon-renweizhi',
       'icon-shoufeizhanzhongdian',
       'icon-shoufeizhanqidianeee',
       'icon-shigongquyu',
-      'icon-guojijijingdian',
-      'icon-gonganjiankong',
-      'icon-tingchechang',
       'icon-ting',
-      'icon-sijiweizhi',
-      'icon-shineitingchechang1',
-      'icon-weizhi4',
-      'icon-weizhi-dingwei',
+      'icon-renwu-yichang',
+      'icon-renwu',
+      'icon-yundong1',
+      'icon-qiyeyonghu',
     ],
   },
   {
-    category: 'building',
-    name: '建筑',
+    category: 'normal0',
+    name: '生活',
     icons: [
-      'icon--nautical',
-      'icon--propellers',
-      'icon--chimneys',
-      'icon--health-clinic',
-      'icon--radio-waves',
-      'icon--radio-waves',
-      'icon-station',
-      'icon-observatory',
-      'icon-gas-station',
-      'icon-factory',
-      'icon-church',
-      'icon-ambulance',
+      'icon-weifang',
+      'icon-huodongicons_senyangyundong',
+      'icon-yiyuan',
+      'icon-shexiangtou',
+      'icon-shexiangtou2-copy-copy',
+      'icon-weixianhuaxuepin',
+      'icon-tingchechang1',
+      'icon-huoHOT',
+      'icon-ranqi',
+      'icon-shui',
+      'icon-dianli-sudu',
+      'icon-xuexiaologo',
     ],
   },
   {
@@ -140,6 +140,24 @@ let svgIcons = [
       'icon-tree10',
     ],
   },
+  {
+    category: 'building',
+    name: '建筑',
+    icons: [
+      'icon--nautical',
+      'icon--propellers',
+      'icon--chimneys',
+      'icon--health-clinic',
+      'icon--radio-waves',
+      'icon--radio-waves',
+      'icon-station',
+      'icon-observatory',
+      'icon-gas-station',
+      'icon-factory',
+      'icon-church',
+      'icon-ambulance',
+    ],
+  },
 ];
 
 let getSVGHtml = icon =>
@@ -165,14 +183,24 @@ let getCircleMarker = cfg => {
     (shadowSize = shadowSize !== undefined ? shadowSize : dfSMarker.shadowSize);
 
   let icon = L.divIcon({
-    html: `<div class="circle-marker ${
-      cfg.effect
-    }" style="background:rgba(${r},${g},${b},${a});box-shadow:0 0 0 ${shadowSize}px rgba(${r},${g},${b},${a *
+    html: `<div class="circle-marker ${cfg.effect ||
+      ''}" style="background:rgba(${r},${g},${b},${a});box-shadow:0 0 0 ${shadowSize}px rgba(${r},${g},${b},${a *
       0.3})"></div>`,
     iconSize: [size, size],
     className: 'ct-divicon',
   });
   return icon;
+};
+
+let getMarkerSymbol = style => {
+  switch (style.type) {
+    case 'circleMarker':
+      return getCircleMarker(style);
+    case 'pictureMarker':
+      return getPictureMarker(style.icon, style.size);
+    default:
+      return L.Icon.Default;
+  }
 };
 
 let dfSMarker = {
@@ -214,36 +242,56 @@ function getDashArray(dashArray, weight) {
   }
 }
 
-function getLineSymbol(style) {
+function getDrawLineSymbol(style) {
   return {
-    shapeOptions: {
-      ...style,
-      weight: style.weight,
-      color: `rgb(${style.color.r},${style.color.g},${style.color.b})`,
-      opacity: style.color.a,
-      dashArray: getDashArray(style.dashArray, style.weight),
-    },
+    shapeOptions: getLineSymbol(style),
     icon: editIcon,
     touchIcon: editIcon,
     showLength: false,
   };
 }
 
-function getPolygonSymbol(style) {
+function getDrawPolygonSymbol(style) {
   return {
-    shapeOptions: {
-      ...style,
-      weight: style.weight,
-      color: `rgb(${style.color.r},${style.color.g},${style.color.b})`,
-      opacity: style.color.a,
-      fillColor: `rgb(${style.fillColor.r},${style.fillColor.g},${style.fillColor.b})`,
-      fillOpacity: style.fillColor.a,
-      dashArray: getDashArray(style.dashArray, style.weight),
-    },
+    shapeOptions: getPolygonSymbol(style),
     icon: editIcon,
     touchIcon: editIcon,
     showArea: false,
   };
+}
+
+function getLineSymbol(style) {
+  return {
+    ...style,
+    weight: style.weight,
+    color: `rgb(${style.color.r},${style.color.g},${style.color.b})`,
+    opacity: style.color.a,
+    dashArray: getDashArray(style.dashArray, style.weight),
+  };
+}
+
+function getPolygonSymbol(style) {
+  return {
+    ...style,
+    weight: style.weight,
+    color: `rgb(${style.color.r},${style.color.g},${style.color.b})`,
+    opacity: style.color.a,
+    fillColor: `rgb(${style.fillColor.r},${style.fillColor.g},${style.fillColor.b})`,
+    fillOpacity: style.fillColor.a,
+    dashArray: getDashArray(style.dashArray, style.weight),
+  };
+}
+
+function getSymbol(style) {
+  let { geoType } = style;
+  switch (geoType) {
+    case 'point':
+      return getMarkerSymbol(style);
+    case 'polyline':
+      return getLineSymbol(style);
+    case 'polygon':
+      return getPolygonSymbol(style);
+  }
 }
 
 let dfCircleMarkerStyle = dfSMarker;
@@ -254,12 +302,16 @@ let dfPictureMarkerStyle = {
 };
 
 export {
+  getSymbol,
   getCircleMarker,
   getPictureMarker,
   dfCircleMarkerStyle,
   dfPictureMarkerStyle,
+  getMarkerSymbol,
   dfPolylineStyle,
   dfPolygonStyle,
+  getDrawLineSymbol,
+  getDrawPolygonSymbol,
   getLineSymbol,
   getPolygonSymbol,
   editIcon,

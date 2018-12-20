@@ -71,6 +71,36 @@ ol {
         border: none;
         background: none;
     }
+    .ct-popup-tb {
+        width: 300px;
+        height: 300px;
+        overflow: auto;
+        padding-right: 5px;
+        table {
+            width: 100%;
+            margin-right: 10px;
+            tr {
+                transition: 0.3s;
+                &:hover {
+                    background: #eee;
+                }
+                &:nth-child(odd) {
+                    background: #f6f6f6;
+                }
+            }
+            th,
+            td {
+                padding: 5px 10px;
+                font-size: 14px;
+            }
+            th {
+                width: 40%;
+            }
+            td {
+                width: 60%;
+            }
+        }
+    }
 }
 
 @keyframes ctmarkerflash {
