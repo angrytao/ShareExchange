@@ -13,17 +13,23 @@ class GeoJSONHeatLayerStyle extends Component {
       blur: config.blur !== undefined ? config.blur : 25,
       name: config.name,
       gradient:
-        config.gradient !== undefined ? config.gradient : { 0.4: 'blue', 0.65: 'lime', 1: 'red' },
+        config.gradient !== undefined
+          ? config.gradient
+          : { 0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1: 'red' },
     };
     console.log(ps.layer);
   }
 
   gradients = {
-    default: { 0.4: 'blue', 0.65: 'lime', 1: 'red' },
-    red: { 0.4: '#ffb2b2', 0.65: '#f77171', 1: 'red' },
-    blue: { 0.4: '#b2b2ff', 0.65: '#7171f7', 1: 'blue' },
-    green: { 0.4: '#b2ffb2', 0.65: '#71f771', 1: 'green' },
+    default: { 0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1: 'red' },
+    red: { 0.4: '#fbb', 0.6: '#f88', 0.7: '#f66', 0.8: '#f44', 1: 'red' },
+    blue: { 0.4: '#bbf', 0.6: '#88f', 0.7: '#66f', 0.8: '#44f', 1: 'blue' },
+    green: { 0.4: '#bfb', 0.6: '#8f8', 0.7: '#6f6', 0.8: '#4f4', 1: 'green' },
   };
+
+  getColor(x) {
+    return `linear-gradient(90deg,${x['0.4']},${x['0.6']},${x['0.7']},${x['0.8']},${x['1']}`;
+  }
 
   getColorBand() {
     let cmp = [];
@@ -33,7 +39,7 @@ class GeoJSONHeatLayerStyle extends Component {
         <Select.Option
           value={i}
           style={{
-            background: `linear-gradient(90deg,${i['0.4']},${i['0.65']},${i['1']}`,
+            background: this.getColor(i),
           }}
         >
           &emsp;
@@ -46,7 +52,6 @@ class GeoJSONHeatLayerStyle extends Component {
   render() {
     let { config } = this.props;
     let { opacity, radius, blur, name, gradient } = this.state;
-    console.log(`linear-gradient(90deg,${gradient['0.4']},${gradient['0.65']},${gradient['1']})`);
     return (
       <div className={st.GeoJSONHeatLayerStyle}>
         <div className={std.group}>
@@ -79,9 +84,7 @@ class GeoJSONHeatLayerStyle extends Component {
                 className={st.colorband}
                 style={{
                   width: 220,
-                  background: `linear-gradient(90deg,${gradient['0.4']},${gradient['0.65']},${
-                    gradient['1']
-                  })`,
+                  background: this.getColor(gradient),
                 }}
                 value={gradient}
                 onChange={e => {
