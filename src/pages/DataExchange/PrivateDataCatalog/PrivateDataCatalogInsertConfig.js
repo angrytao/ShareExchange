@@ -1,9 +1,20 @@
 import { Component, Fragment } from 'react';
+import ReactDOM from 'react-dom';
 import { Row, Col, Select, Form, Button, Input, Icon } from 'antd';
+import Popup from '../../Common/Popup/Popup';
 import store from '../../../store';
 import { setUploadFileGeomFieldType } from "../../../store/actionCreates";
 import L from '../../../refs/leafletExtends';
 import { mapConfig } from '../../../../config/ctconfig';
+import {
+    getCircleMarker,
+    getPictureMarker,
+    dfCircleMarkerStyle,
+    dfPolylineStyle,
+    dfPolygonStyle,
+    getLineSymbol,
+    getPolygonSymbol,
+  } from '../../Cartography/Map/icons';
 import st from './PrivateDataCatalogInsert.less';
 
 const FormItem = Form.Item;
@@ -24,9 +35,14 @@ class PrivateDataCatalogInsertConfigForm extends Component{
             crs: L.CRS.EPSG4490,
             attributionControl: false,
             zoomControl: false,
+            fullscreenControl: true,
+            fullscreenControlOptions: {
+                position: 'topright'
+            }
         });
         L.tileLayer.getGroupLayer(['vec','vec_anno']).addTo(map);
         this.map = map;
+        this.markerStyle = dfCircleMarkerStyle;
     }
 
     getData(){
@@ -46,16 +62,25 @@ class PrivateDataCatalogInsertConfigForm extends Component{
     handleLatlngAddToMap(data,head){
         let hlat = head[window.selectlat];
         let hlng = head[window.selectlng];
+        let htit = head[window.selectTitle];
         this.currentLayer = L.layerGroup();
+
+        let geoms = [];
+        geoms.push(hlat);
+        geoms.push(hlng);
 
         data.map((item) => {
             let lat = parseFloat(item[hlat]);
             let lng = parseFloat(item[hlng]);
             let geom = L.latLng(lat,lng);
-            for(let o in item){
-                let i =o;
-            }
-            L.marker(geom).addTo(this.currentLayer);
+        
+            let marker =L.marker(geom,{
+                icon:getCircleMarker(this.markerStyle)
+            });
+            var popup = document.createElement('div');
+            ReactDOM.render(<Popup itemData={item} itemTitle={htit} itemGeom={geoms}></Popup>,popup);
+            marker.bindPopup(popup);
+            marker.addTo(this.currentLayer);
         });
 
         this.currentLayer.addTo(this.map);

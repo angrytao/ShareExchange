@@ -37,7 +37,7 @@ class PrivateDataCatalogInsert extends Component {
     store.dispatch(action);
   }
 
-  handleCancel = (e) => {
+  handleCancel = () => {
     const isVisible = false;
     const action = changeUploadFileVisible(isVisible);
     store.dispatch(action);
