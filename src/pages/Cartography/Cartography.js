@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import Link from 'umi/link';
 import st from './Cartography.less';
 import '../../refs/__Extends__';
 
@@ -69,7 +70,9 @@ class Cartography extends Component {
     return (
       <div className={st.Cartography}>
         <div className={st.siderbar}>
-          <div className={st.logo + ' iconfont icon-wangzhuangdiqiu'} />
+          <div className={st.logo + ' iconfont icon-wangzhuangdiqiu'}>
+            <Link to="/" />
+          </div>
           <div className={st.mappingbar}>
             <div
               onClick={e => this.changePanel(enums.LayerControl)}
